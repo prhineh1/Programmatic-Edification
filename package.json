@@ -4,11 +4,14 @@
   "description": "",
   "main": "binary-search.js",
   "dependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4",
     "typescript": "^3.5.1"
   },
   "devDependencies": {},
   "scripts": {
-    "compile": "tsc --outDir ./compiled-js"
+    "compile": "tsc --outDir ./compiled-js",
+    "test": "mocha"
   },
   "author": "Phil",
   "license": "ISC"
