@@ -11,17 +11,17 @@ const linkedListPrototype = {
             let n = this.head;
             // if list has one element
             if (n.next === null) {
-                return `[|${n.data}|]`;
+                return `[|${n[Symbol.toPrimitive]()}|]`;
             }
 
             // list with > 1 elements
-            let str = '[|' + n.data + ', ';
+            let str = `[|${n[Symbol.toPrimitive]()}, `;
             while (n.next !== null) {
                 n = n.next;
                 if (n.next === null) {
-                    str += n.data + '|]';
+                    str += `${n[Symbol.toPrimitive]()}|]`;
                 } else {
-                    str += n.data + ', ';
+                    str += `${n[Symbol.toPrimitive]()}, `;
                 }
             }
             return str;
@@ -41,17 +41,21 @@ const linkedListPrototype = {
                 }
             }
         }
-    }, 
+    },
     concat: function(...args) {
         args = args;
         let list = LinkedList();
+
         // args is empty
         if (args.length < 1) {
+            if (this.head !== null) {
+                list.head = this.head;
+            }
             return list;
         }
-        
+
         /**
-         * concatenating an empty linked list
+         * concatenating on an empty linked list
          * returns the object the method was called on
          * thus remove all empty linked lists from args
          */
@@ -64,41 +68,94 @@ const linkedListPrototype = {
             ++i;
         }
 
+        // check for empty args after removing empty linked lists
+        if (args.length < 1) {
+            if (this.head !== null) {
+                list.head = this.head;
+            }
+            return list;
+        }
+
         // convert non-linked lists and non-nodes into nodes
         i = 0;
         while (i < args.length) {
-            if (!isLinkedList || !args[i].hasOwnProperty("node")) {
+            if (!isLinkedList && !args[i].hasOwnProperty("node")) {
                 args[i] = node(args[i]);
             }
             ++i;
         }
 
-        // form a new linked list from args
+        // if 'this' is non-empty we set the head here
+        if (this.head !== null) {
+            list.head = this.head;
+        }
+
         i = 0;
-        list.head = args[0];
-        for (i; i < args.length-1; ++i) {
+        do {
+            // set list.head if 'this' was empty
+            if (i < 1 && this.head === null) {
+                if (isLinkedList) {
+                    list.head = args[i].head
+                } else {
+                    list.head = args[i];
+                }
             /**
-             * iterate through linked lists
-             * link final node to next item in args
+             * iterate through 'list'
+             * link last node to first item in args
              */
-            if (isLinkedList) {
-                for (let n of args[i]) {
+            } else if (i < 1 && this.head !== null) {
+                for (let n of list) {
                     if (n.next === null) {
-                        n.next = args[i+1];
+                        if (isLinkedList) {
+                            n.next = args[i].head;
+                        } else {
+                            n.next = args[i];
+                        }
+                        // must break so cycle isn't created
+                        break;
                     }
                 }
-            } else {
-                // otherwise link the node to the next item in args
-                args[i].next = args[i+1];
             }
-        }
+            /**
+             * iterate through linked lists
+             * link final node to next item in args,
+             * if its a node; or to the head of the
+             * next item in args, if a linked list
+             */
+            if (i >= 1 && isLinkedList) {
+                for (let n of args[i]) {
+                    if (n.next === null) {
+                        if (isLinkedList) {
+                            n.next = args[i+1].head;
+                        } else {
+                            n.next = args[i+1];
+                        }
+                        // must break so cycle isn't created
+                        break;
+                    }
+                }
+            /**
+             * link nodes to next item in args,
+             * if a node; or to head of
+             * next item in args if linked list
+             */
+            } else if (i >= 1 && !isLinkedList) {
+                if (isLinkedList) {
+                    args[i].next = args[i+1].head
+                } else {
+                    args[i].next = args[i+1];
+                }
+            }
+            ++i;
+        } while (i < args.length);
+
         return list;
     }
 }
 
 /**
  * Creates a Linked List
- * @param  {...any} args 
+ * @param  {...any} args
  * @returns {object}
  */
 const LinkedList = (...args) => {
@@ -129,6 +186,12 @@ const LinkedList = (...args) => {
             value: true,
         }
     }
+
+    // return empty list if args is empty
+    if (args.length < 1) {
+        return Object.create(linkedListPrototype, props);
+    }
+
     // construct linked list
     let nodeList = node(...args) || [];
 
@@ -143,8 +206,8 @@ const LinkedList = (...args) => {
         }
         nodeList[i].next = nodeList[i+1];
     }
-    
+
     return Object.create(linkedListPrototype, props);
 }
-
+LinkedList(1,2).concat(LinkedList(3,4));
 module.exports = LinkedList;

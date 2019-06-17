@@ -3,7 +3,7 @@
 /**
  * Creats a Node object
  * @param  {...any} args
- * @returns {object, array, undefined} 
+ * @returns {object, array, undefined}
  */
 
 const Node = (...args) => {
@@ -25,12 +25,14 @@ const Node = (...args) => {
             writable: true,
             enumberable: true
         },
-        node: {
+        ['node']: {
             value: true
         },
         [Symbol.toPrimitive]: {
             value: function() {
-                return `{data: ${this.data}, next: ${this.next !== null ? 'Node' : null}, prev: ${this.prev}}`;
+                const isArray = Array.isArray(this.data) ? '[object Array]' : this.data;
+                const isNode = (data) => data !== null ? 'Node' : data;
+                return `{ data: ${isArray}, next: ${isNode(this.next)}, prev: ${isNode(this.prev)} }`;
             }
         }
     }
