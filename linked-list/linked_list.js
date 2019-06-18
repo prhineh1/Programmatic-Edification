@@ -102,6 +102,19 @@ const linkedListPrototype = {
         }
 
         return list;
+    },
+    reverse: function(n=this.head) {
+        let list = LinkedList();
+
+        if (n === null) {
+            return list;
+        }
+
+        if (n.next !== null) {
+            list = this.reverse(n.next);
+            n.next = null;
+        }
+        return list.concat(n);
     }
 }
 
@@ -145,21 +158,25 @@ const LinkedList = (...args) => {
     }
 
     // construct linked list
-    let nodeList = node(...args) || [];
+    let nodeList = args.map(arg => {
+        if (typeof arg !== 'object' || !arg.hasOwnProperty("node")) {
+            return node(arg);
+        } else {
+            return arg;
+        }
+    }) 
 
-    // in case node() returns a single object
-    if (nodeList.length === undefined) {
-        props.head.value = nodeList;
-    }
     // in case node() returns Array
-    for (let i = 0; i < nodeList.length-1; i ++) {
+    for (let i = 0; i < nodeList.length; i ++) {
         if (i < 1) {
             props.head.value = nodeList[i];
         }
-        nodeList[i].next = nodeList[i+1];
+        if (i < nodeList.length-1) {
+            nodeList[i].next = nodeList[i+1];
+        }
     }
 
     return Object.create(linkedListPrototype, props);
 }
-LinkedList(1,2).concat(LinkedList(3,4), [17], LinkedList(), node(5,6));
+console.log(LinkedList(2));
 module.exports = LinkedList;

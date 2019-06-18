@@ -52,11 +52,11 @@ describe('Linked List', function() {
     });
 
     it('concats an empty list with non-node element', function() {
-        assert.equal(func().concat(1).length, 1, '= list with one element');
+        assert.equal(func().concat([1,2,3]).length, 1, '= list with one element');
     });
 
     it('concats an empty list with a node element', function() {
-        assert.deepEqual(func().concat(node(5)).length, 1, '= list with one element');
+        assert.deepEqual(""+func().concat(node(5)).head, '{ data: 5, next: null, prev: null }', '= list with one element');
     });
 
     it('concats a list with an empty list', function() {
@@ -81,5 +81,17 @@ describe('Linked List', function() {
         assert.notEqual(x1, y1, 'different lists 1');
         assert.notEqual(x2, y2, 'different lists 2');
         assert.notEqual(x3, y3, 'different lists 3');
+    });
+
+    it('reverses a linked list', function() {
+        assert.equal(func().reverse().head, null, 'an empty list');
+    });
+
+    it('reverses a linked list', function() {
+        assert.deepEqual(""+func(1).reverse().head, "{ data: 1, next: null, prev: null }")
+    });
+
+    it('reverses a linked list', function() {
+        assert.deepEqual(""+func(1,2,3).reverse().head, "{ data: 3, next: Node, prev: null }")
     });
 });
