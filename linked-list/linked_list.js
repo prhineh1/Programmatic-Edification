@@ -1,24 +1,28 @@
 const node = require('../node/node');
 
 const linkedListPrototype = {
+
         // print linked list in array format
         [Symbol.toPrimitive]: function() {
+
             // if list is empty
-            if (this.head === null) {
+            if (!this.head) {
                 return '[||]';
             }
 
             let n = this.head;
+
             // if list has one element
-            if (n.next === null) {
+            if (!n.next) {
                 return `[|${n[Symbol.toPrimitive]()}|]`;
             }
 
             // list with > 1 elements
             let str = `[|${n[Symbol.toPrimitive]()}, `;
-            while (n.next !== null) {
+
+            while (n.next) {
                 n = n.next;
-                if (n.next === null) {
+                if (!n.next) {
                     str += `${n[Symbol.toPrimitive]()}|]`;
                 } else {
                     str += `${n[Symbol.toPrimitive]()}, `;
@@ -30,10 +34,10 @@ const linkedListPrototype = {
         let node = null;
         return {
             next: () => {
-                if (node === null && this.head !== null) {
+                if (!node && this.head) {
                     node = this.head;
                     return { value: node, done: false };
-                } if (node.next !== null) {
+                } if (node.next) {
                     node = node.next;
                     return { value: node, done: false}
                 } else {
@@ -42,13 +46,18 @@ const linkedListPrototype = {
             }
         }
     },
+    /**
+     *
+     * @param  {...any} args
+     * @returns {LinkedList}
+     */
     concat: function(...args) {
         args = args;
         let list = LinkedList();
 
         // args is empty
         if (args.length < 1) {
-            if (this.head !== null) {
+            if (this.head) {
                 list.head = this.head;
             }
             return list;
@@ -64,7 +73,7 @@ const linkedListPrototype = {
 
         // check for empty args after removing empty linked lists
         if (args.length < 1) {
-            if (this.head !== null) {
+            if (this.head) {
                 list.head = this.head;
             }
             return list;
@@ -78,13 +87,13 @@ const linkedListPrototype = {
         }
 
         // if 'this' is non-empty we set the head here
-        if (this.head !== null) {
+        if (this.head) {
             list.head = this.head;
         }
 
         for (let i=0; i < args.length; ++i) {
             // set list.head if 'this' was empty
-            if (list.head === null) {
+            if (!list.head) {
                 list.head = args[i].head;
             } else {
                 /**
@@ -92,7 +101,7 @@ const linkedListPrototype = {
                  * link last node to next item in args
                  */
                 for (let n of list) {
-                    if (n.next === null) {
+                    if (!n.next) {
                         n.next = args[i].head;
                         // must break so cycle isn't created
                         break;
@@ -103,14 +112,12 @@ const linkedListPrototype = {
 
         return list;
     },
-    reverse: function(n=this.head) {
+    reverse: function(n = this.head) {
         let list = LinkedList();
 
-        if (n === null) {
-            return list;
-        }
+        if (!n) { return list; }
 
-        if (n.next !== null) {
+        if (n.next) {
             list = this.reverse(n.next);
             n.next = null;
         }
@@ -120,7 +127,7 @@ const linkedListPrototype = {
 
 /**
  * Creates a Linked List
- * @param  {...any} args
+ * @constructor  {...any} args
  * @returns {object}
  */
 const LinkedList = (...args) => {
@@ -135,11 +142,11 @@ const LinkedList = (...args) => {
         length: {
             get() {
                 let len = 1;
-                if (this.head === null) {
+                if (!this.head) {
                     return --len;
                 }
                 let n = this.head;
-                while (n.next !== null) {
+                while (n.next) {
                     n = n.next;
                     ++len;
                 }
@@ -164,7 +171,7 @@ const LinkedList = (...args) => {
         } else {
             return arg;
         }
-    }) 
+    })
 
     // in case node() returns Array
     for (let i = 0; i < nodeList.length; i ++) {
@@ -178,5 +185,4 @@ const LinkedList = (...args) => {
 
     return Object.create(linkedListPrototype, props);
 }
-console.log(LinkedList(2));
 module.exports = LinkedList;
