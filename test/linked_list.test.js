@@ -36,7 +36,7 @@ describe('Linked List', function() {
     });
 
     it('Iterates through a linked list', function() {
-        let iterator = func(1,2,3)[Symbol.iterator]();
+        const iterator = func(1,2,3)[Symbol.iterator]();
         assert.propertyVal(iterator.next(), 'done', false, '1st item');
         assert.propertyVal(iterator.next(), 'done', false, '2nd item');
         assert.propertyVal(iterator.next(), 'done', false, '3rd item');
@@ -64,6 +64,22 @@ describe('Linked List', function() {
     });
 
     it('concats a list with a list', function() {
-        assert.deepEqual(func(1,2).concat(func(3,4)).length, 4, '= list with one element');
+        assert.deepEqual(func(1,2).concat(func(3,4)).length, 4, '= list with 4 elements');
+    });
+
+    it('concats a list with multiple items', function() {
+        assert.deepEqual(func(1,2).concat(func(3,4), [17], func(), node(5,6)).length, 6, '= list with 6 elements');
+    });
+
+    it('lists are unique', function() {
+        let x1 = func(1);
+        let y1 = x1.concat();
+        const x2 = func(1);
+        const y2 = x2.concat(func());
+        const x3 = func(1);
+        const y3 = x3.concat(func(2));
+        assert.notEqual(x1, y1, 'different lists 1');
+        assert.notEqual(x2, y2, 'different lists 2');
+        assert.notEqual(x3, y3, 'different lists 3');
     });
 });

@@ -59,14 +59,8 @@ const linkedListPrototype = {
          * returns the object the method was called on
          * thus remove all empty linked lists from args
          */
-        let i = 0;
-        const isLinkedList = typeof args[i] === 'object' && args[i].hasOwnProperty("linkedList");
-        while (i < args.length) {
-            if (isLinkedList && args[i].head === null) {
-                args.splice(i, 1);
-            }
-            ++i;
-        }
+        const isLinkedList = (arg) => typeof arg === 'object' && arg.hasOwnProperty("linkedList");
+        args = args.filter(arg => !isLinkedList(arg) || arg.length > 0)
 
         // check for empty args after removing empty linked lists
         if (args.length < 1) {
@@ -76,13 +70,11 @@ const linkedListPrototype = {
             return list;
         }
 
-        // convert non-linked lists and non-nodes into nodes
-        i = 0;
-        while (i < args.length) {
-            if (!isLinkedList && !args[i].hasOwnProperty("node")) {
-                args[i] = node(args[i]);
+        // convert non-linked lists into linked lists
+        for (let i=0; i < args.length; i++) {
+            if (!isLinkedList(args[i])) {
+                args[i] = LinkedList(args[i]);
             }
-            ++i;
         }
 
         // if 'this' is non-empty we set the head here
@@ -90,64 +82,24 @@ const linkedListPrototype = {
             list.head = this.head;
         }
 
-        i = 0;
-        do {
+        for (let i=0; i < args.length; ++i) {
             // set list.head if 'this' was empty
-            if (i < 1 && this.head === null) {
-                if (isLinkedList) {
-                    list.head = args[i].head
-                } else {
-                    list.head = args[i];
-                }
-            /**
-             * iterate through 'list'
-             * link last node to first item in args
-             */
-            } else if (i < 1 && this.head !== null) {
+            if (list.head === null) {
+                list.head = args[i].head;
+            } else {
+                /**
+                 * iterate through 'list'
+                 * link last node to next item in args
+                 */
                 for (let n of list) {
                     if (n.next === null) {
-                        if (isLinkedList) {
-                            n.next = args[i].head;
-                        } else {
-                            n.next = args[i];
-                        }
+                        n.next = args[i].head;
                         // must break so cycle isn't created
                         break;
                     }
                 }
             }
-            /**
-             * iterate through linked lists
-             * link final node to next item in args,
-             * if its a node; or to the head of the
-             * next item in args, if a linked list
-             */
-            if (i >= 1 && isLinkedList) {
-                for (let n of args[i]) {
-                    if (n.next === null) {
-                        if (isLinkedList) {
-                            n.next = args[i+1].head;
-                        } else {
-                            n.next = args[i+1];
-                        }
-                        // must break so cycle isn't created
-                        break;
-                    }
-                }
-            /**
-             * link nodes to next item in args,
-             * if a node; or to head of
-             * next item in args if linked list
-             */
-            } else if (i >= 1 && !isLinkedList) {
-                if (isLinkedList) {
-                    args[i].next = args[i+1].head
-                } else {
-                    args[i].next = args[i+1];
-                }
-            }
-            ++i;
-        } while (i < args.length);
+        }
 
         return list;
     }
@@ -209,5 +161,5 @@ const LinkedList = (...args) => {
 
     return Object.create(linkedListPrototype, props);
 }
-LinkedList(1,2).concat(LinkedList(3,4));
+LinkedList(1,2).concat(LinkedList(3,4), [17], LinkedList(), node(5,6));
 module.exports = LinkedList;
