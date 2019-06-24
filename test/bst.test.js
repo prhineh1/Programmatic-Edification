@@ -42,4 +42,23 @@ describe('binary search tree', function() {
         tree.insert(75).insert(25).insert(17).insert(28);
         assert.equal(tree.maximum().data, 75);
     });
+
+    it("should delete the head node", function() {
+        let tree = new func(50);
+        tree.insert(75).insert(25).insert(17).insert(28);
+        assert.deepEqual(tree.delete(50).inorderTraversal(), [17,25,28,75], 'head has two children');
+        assert.deepEqual(tree.delete(75).inorderTraversal(), [17,25,28], 'head has one child');
+    });
+
+    it("should delete a leaf node", function() {
+        let tree = new func(50);
+        tree.insert(75).insert(25).insert(17).insert(28);
+        assert.deepEqual(tree.delete(17).inorderTraversal(), [25,28,50,75]);
+    });
+
+    it("should delete a node with two children", function() {
+        let tree = new func(50);
+        tree.insert(75).insert(25).insert(17).insert(28);
+        assert.deepEqual(tree.delete(25).inorderTraversal(), [17,28,50,75]);
+    });
 })
