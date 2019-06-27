@@ -52,7 +52,6 @@ const linkedListPrototype = {
      * @returns {LinkedList}
      */
     concat: function(...args) {
-        args = args;
         let list = LinkedList();
 
         // args is empty
@@ -122,6 +121,67 @@ const linkedListPrototype = {
             n.next = null;
         }
         return list.concat(n);
+    },
+    reverse2: function(n = this.head) {
+        if (!n) {return this};
+
+        let p = null;
+        let q;
+        while (n.next) {
+            q = n.next;
+            n.next = p;
+            p = n;
+            n = q;
+        }
+        n.next = p;
+        this.head = n;
+        return this;
+    },
+    findCycle: function(slowRef = this.head, fastRef = this.head) {
+        let cycle;
+        if (!this.head) {
+            return null;
+        }
+        if (fastRef && fastRef.next) {
+            slowRef = slowRef.next;
+            fastRef = fastRef.next.next;
+            if (fastRef === slowRef) {
+                return slowRef;
+            }
+            cycle = this.findCycle(slowRef, fastRef);
+        } else {
+            return null;
+        }
+        return cycle;
+    },
+    removeCycle: function() {
+        const cycle = this.findCycle();
+        if (true) {
+            let p = q = cycle;
+            // find the length of cycle
+            let cycleLength = 1;
+            while (q.next !== p) {
+                ++cycleLength;
+                q = q.next;
+            }
+
+            // find the length of remaning list
+            q = cycle;
+            p = this.head;
+            let restLength = 0;
+            while (q !== p) {
+                ++restLength;
+                q = q.next;
+                p = p.next;
+            }
+            // remove the cycle
+            p = this.head;
+            for (let i = 1; i < cycleLength + restLength; ++i) {
+                p = p.next;
+            }
+            p.next = null;
+        }
+        return this;
     }
 }
 
@@ -131,7 +191,6 @@ const linkedListPrototype = {
  * @returns {object}
  */
 const LinkedList = (...args) => {
-    args = args;
     // linked list obj props
     let props = {
         head: {
@@ -185,4 +244,5 @@ const LinkedList = (...args) => {
 
     return Object.create(linkedListPrototype, props);
 }
+
 module.exports = LinkedList;

@@ -7,7 +7,6 @@
  */
 
 const Node = (...args) => {
-    args = args; // converts to an array
 
     const props = {
         data: {

@@ -94,4 +94,29 @@ describe('Linked List', function() {
     it('reverses a linked list', function() {
         assert.deepEqual(""+func(1,2,3).reverse().head, "{ data: 3, next: Node, prev: null }")
     });
+
+    it('reverses a linked list (reverse2)', function() {
+        assert.equal(func().reverse2().head, null, 'an empty list');
+    });
+
+    it('reverses a linked list (reverse2)', function() {
+        assert.deepEqual(""+func(1).reverse2().head, "{ data: 1, next: null, prev: null }")
+    });
+
+    it('reverses a linked list (reverse2)', function() {
+        assert.deepEqual(""+func(1,2,3).reverse2().head, "{ data: 3, next: Node, prev: null }")
+    });
+
+    it('detects a cycle', function() {
+        let cycle = func(1);
+        cycle.head.next = cycle.head;
+        assert.deepEqual(""+cycle.findCycle(), "{ data: 1, next: Node, prev: null }")
+    });
+
+    it('removes a cycle', function() {
+        let cycle = func(1,2,3);
+        cycle.head.next.next.next = cycle.head;
+        cycle.removeCycle();
+        assert.equal(cycle.head.next.next.next, null)
+    });
 });
