@@ -33,11 +33,11 @@ const sort = (left: number[], right: number[]): number[] => {
 
     return sorted;
 }
-
+// (n * log n time complexity)
 const mergeSort = (list: number[]): number[] => {
     let left, right: number[];
 
-    if (list.length === 1) { return list; }
+    if (list.length <= 1) { return list; }
     let half: number = Math.floor(list.length/2);
     left = mergeSort(list.slice(0, half));
     right = mergeSort(list.slice(half));
