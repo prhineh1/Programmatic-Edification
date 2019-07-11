@@ -40,10 +40,10 @@ const findIversions = (list) => {
 
     if (list.length <= 1) { return [list, 0]; }
     let half = Math.floor(list.length/2);
-    [left, leftInv]  = mergeSort(list.slice(0, half));
-    [right, rightInv] = mergeSort(list.slice(half));
+    [left, leftInv]  = findIversions(list.slice(0, half));
+    [right, rightInv] = findIversions(list.slice(half));
     [sorted, splitInv] = count(left, right);
     return [sorted, splitInv+leftInv+rightInv]
 }
 
-console.log(mergeSort([6,5,4,3,2,1]));
+console.log(findIversions([1,3,5,2,4,6]));
