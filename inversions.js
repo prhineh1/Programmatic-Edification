@@ -7,8 +7,8 @@ const count = (left, right) => {
 
     // sort the sub-arrays
     while (j < left.length && i < right.length) {
-        if (left[j] < right[i]) {
-            sorted[k]= left[j];
+        if (left[j] <= right[i]) {
+            sorted[k] = left[j];
             ++j;
         }
         else {
