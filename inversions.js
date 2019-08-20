@@ -7,7 +7,7 @@ const count = (left, right) => {
 
     // sort the sub-arrays
     while (j < left.length && i < right.length) {
-        if (left[j] < right[i]) {
+        if (left[j] <= right[i]) {
             sorted[k]= left[j];
             ++j;
         }
@@ -47,3 +47,4 @@ const findIversions = (list) => {
 }
 
 console.log(findIversions([1,3,5,2,4,6]));
+console.log(findIversions([1,6,7,8,2]))
