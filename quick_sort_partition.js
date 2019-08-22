@@ -1,12 +1,12 @@
-const partition = (arr, pivot) => {
+const partition = (arr, lbound, rbound) => {
     // i iterates through the array
     // j tracks where the pivot is placed
     let i, j;
-    i = j = 0;
+    i = j = lbound;
 
-    for (i; i < pivot; ++i) {
+    for (i; i < rbound; ++i) {
         let temp;
-        if (arr[i] < arr[arr.pivot]) {
+        if (arr[i] < arr[rbound]) { // use the last element for the partition
             temp = arr[i];
             arr[i] = arr[j];
             arr[j] = temp;
@@ -15,8 +15,8 @@ const partition = (arr, pivot) => {
     }
 
     let swap;
-    swap = arr[arr.pivot];
-    arr[arr.pivot] = arr[j];
+    swap = arr[rbound];
+    arr[rbound] = arr[j];
     arr[j] = swap;
 
     return j;
