@@ -5,7 +5,7 @@ const quicksort = (arr, lbound, rbound) => {
         return;
     }
     let pivot = partition(arr, lbound, rbound);
-    if (lbound < pivot-1) {
+    if (lbound < pivot) {
         quicksort(arr, lbound, pivot-1); 
     }
     if (pivot < rbound) {
