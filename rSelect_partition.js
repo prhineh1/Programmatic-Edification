@@ -1,8 +1,8 @@
-const partition = (arr, lbound, rbound) => {
+const partition = (arr, rbound) => {
     // i iterates through the array
     // j tracks where the pivot is placed
     let i, j;
-    i = j = lbound;
+    i = j = 0;
 
     // ensure rbound is the last element
     let last;

@@ -11,7 +11,7 @@ const rSelect = (arr, ord) => {
     }
 
     // choose pivot randomly
-    const position = partition(arr, 0, Math.floor(Math.random() * arr.length));
+    const position = partition(arr, Math.floor(Math.random() * arr.length));
 
     if (position === ord) {
         return arr[position];
