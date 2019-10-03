@@ -1,7 +1,7 @@
 'use strict';
 const partition = require ('./rSelect_partition');
 
-const rSelect = (arr, ord) => {
+const rSelect = (arr, ord, lbound, rbound) => {
     if (ord > arr.length) {
         return null;
     }
@@ -10,20 +10,29 @@ const rSelect = (arr, ord) => {
         return arr[0];
     }
 
-    // choose pivot randomly
-    const position = partition(arr, Math.floor(Math.random() * arr.length));
+    if (rbound === lbound) {
+        return arr[rbound];
+    }
+
+    // choose pivot randomly; ensure it's between lbound and rbound
+    let randomPivot;
+    do {
+        randomPivot = Math.floor(Math.random() * ((rbound+1)-lbound));
+    } while (randomPivot < lbound || randomPivot > rbound);
+
+    const position = partition(arr, lbound, rbound, randomPivot);
 
     if (position === ord) {
         return arr[position];
     }
 
     if (position > ord) {
-        return rSelect(arr.slice(0, position), ord);
+        return rSelect(arr, ord, lbound, position-1);
     }
 
     if (position < ord) {
-        return rSelect(arr.slice(position+1), ord - (position+1));
+        return rSelect(arr, ord - position, position+1, rbound);
     }
 }
 
-console.log(rSelect([6,8,9,2,3,22], 1));
+console.log(rSelect([6,8,9,2,3,22], 1, 0, 5));
