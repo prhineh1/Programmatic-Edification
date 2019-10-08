@@ -14,7 +14,7 @@ const rSelect = (arr, ord, lbound, rbound) => {
         return arr[rbound];
     }
 
-    // choose pivot randomly; ensure it's between lbound and rbound
+    // choose pivot randomly between lbound and rbound
     let randomPivot;
     do {
         randomPivot = Math.floor(Math.random() * ((rbound+1)-lbound));
