@@ -1,9 +1,10 @@
 // vertices = n edges = m
 
 const UndirectedGraph = (vert, edg) => {
-    let Graph;
+    let Graph = {};
     for (let v of vert) {
         Graph[v] = {
+            data: v,
             edges: edg[v],
             explored: false
         }
@@ -12,9 +13,10 @@ const UndirectedGraph = (vert, edg) => {
 }
 
 const DirectedGraph = (vert, inc, out) => {
-    let Graph;
+    let Graph = {};
     for (let v of vert) {
         Graph[v] = {
+            data: v,
             inc: inc[v],
             out: out[v]
         }
